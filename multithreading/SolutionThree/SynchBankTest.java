@@ -27,6 +27,10 @@ public class SynchBankTest {
  */
 class Bank {
 
+    private final double[] accounts;
+    private Lock bankLock;
+    private Condition sufficientFunds;
+
     /**
      * Constructs the bank.
      *
@@ -49,8 +53,7 @@ class Bank {
      * @param to     the account to transfer to
      * @param amount the amount to transfer
      */
-    public void transfer(int from, int to, double amount)
-            throws InterruptedException {
+    public void transfer(int from, int to, double amount) throws InterruptedException {
         bankLock.lock();
         try {
             while (accounts[from] < amount)
@@ -91,10 +94,6 @@ class Bank {
     public int size() {
         return accounts.length;
     }
-
-    private final double[] accounts;
-    private Lock bankLock;
-    private Condition sufficientFunds;
 }
 
 /**
