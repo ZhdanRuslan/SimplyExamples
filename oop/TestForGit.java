@@ -5,6 +5,6 @@ package oop;
  */
 public class TestForGit {
     public static void main(String[] args) {
-        
+
     }
 }

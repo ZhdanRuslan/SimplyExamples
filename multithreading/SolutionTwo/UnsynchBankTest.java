@@ -1,7 +1,12 @@
-package multithreading;
+package multithreading.SolutionTwo;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * This program shows data corruption when multiple threads access a data structure.
+ * This program resolve problem data corruption
+ * when multiple threads access a data structure
+ * which was showed in SolutionOne package .
  */
 public class UnsynchBankTest {
     public static void main(String[] args) {
@@ -22,6 +27,11 @@ public class UnsynchBankTest {
  * A bank with a number of bank accounts.
  */
 class Bank {
+
+    /*Here, we create new instance for
+    synchronizing with ReentrantLock*/
+    private Lock bankLock = new ReentrantLock();
+
     /**
      * Constructs the bank.
      *
@@ -30,6 +40,7 @@ class Bank {
      *                       for each account
      */
     public Bank(int n, double initialBalance) {
+
         accounts = new double[n];
         for (int i = 0; i < accounts.length; i++)
             accounts[i] = initialBalance;
@@ -43,12 +54,17 @@ class Bank {
      * @param amount the amount to transfer
      */
     public void transfer(int from, int to, double amount) {
-        if (accounts[from] < amount) return;
-        System.out.print(Thread.currentThread());
-        accounts[from] -= amount;
-        System.out.printf(" %10.2f from %d to %d", amount, from, to);
-        accounts[to] += amount;
-        System.out.printf(" Total Balance: %10.2f%n", getTotalBalance());
+        bankLock.lock();
+        try {
+            if (accounts[from] < amount) return;
+            System.out.print(Thread.currentThread());
+            accounts[from] -= amount;
+            System.out.printf(" %10.2f from %d to %d", amount, from, to);
+            accounts[to] += amount;
+            System.out.printf(" Total Balance: %10.2f%n", getTotalBalance());
+        } finally {
+            bankLock.unlock();
+        }
     }
 
     /**
@@ -71,6 +87,7 @@ class Bank {
     public int size() {
         return accounts.length;
     }
+
     private final double[] accounts;
 }
 
@@ -93,6 +110,7 @@ class TransferRunnable implements Runnable {
         maxAmount = max;
     }
 
+    @Override
     public void run() {
         try {
             while (true) {
