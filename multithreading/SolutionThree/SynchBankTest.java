@@ -124,6 +124,7 @@ class TransferRunnable implements Runnable {
                 Thread.sleep((int) (DELAY * Math.random()));
             }
         } catch (InterruptedException e) {
+            /*NOP*/
         }
     }
 
