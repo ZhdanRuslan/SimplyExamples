@@ -1,8 +1,6 @@
 package multithreading.SolutionThree;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.*;
 
 /**
  * This program shows how multiple threads can safely access a data structure.
@@ -114,6 +112,7 @@ class TransferRunnable implements Runnable {
         maxAmount = max;
     }
 
+    @Override
     public void run() {
         try {
             while (true) {
