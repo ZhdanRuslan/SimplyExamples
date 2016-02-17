@@ -1,11 +1,17 @@
 package multithreading.SolutionThree;
 
-import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This program shows how multiple threads can safely access a data structure.
  */
 public class SynchBankTest {
+
+    public static final int NACCOUNTS = 100;
+    public static final double INITIAL_BALANCE = 1000;
+
     public static void main(String[] args) {
         Bank b = new Bank(NACCOUNTS, INITIAL_BALANCE);
         int i;
@@ -15,9 +21,6 @@ public class SynchBankTest {
             t.start();
         }
     }
-
-    public static final int NACCOUNTS = 100;
-    public static final double INITIAL_BALANCE = 1000;
 }
 
 /**
@@ -99,6 +102,12 @@ class Bank {
  * accounts in a bank.
  */
 class TransferRunnable implements Runnable {
+
+    private Bank bank;
+    private int fromAccount;
+    private double maxAmount;
+    private int DELAY = 10;
+
     /**
      * Constructs a transfer runnable.
      *
@@ -125,9 +134,4 @@ class TransferRunnable implements Runnable {
             /*NOP*/
         }
     }
-
-    private Bank bank;
-    private int fromAccount;
-    private double maxAmount;
-    private int DELAY = 10;
 }
